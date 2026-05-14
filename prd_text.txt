@@ -1,0 +1,647 @@
+ANDROID GENAI APP DEVELOPMENT PROJECT
+Sahyadri-Samrakshane
+Forest Sentinel – Citizen Science for the Western Ghats
+DOCUMENT TYPE
+Project Requirement Document (PRD)
+DOMAIN
+Environmental Technology / GenAI Mobile App
+PLATFORM
+Android (Native – Kotlin / Jetpack Compose)
+VERSION
+1.0  |  Draft for Review
+DATE
+April 27, 2026
+Protecting India's Water Tower  ·  Sahyadri Hills  ·  Western Ghats, Karnataka
+
+Sahyadri-Samrakshane  |  Project Requirement Document
+Page 1
+Confidential – Internal Academic Use Only  ·  Generated April 27, 2026
+Android GenAI App Development  ·  Sahyadri-Samrakshane
+■ Table of Contents
+1.
+Executive Summary
+3
+2.
+Problem Statement
+3
+3.
+Vision & Objectives
+4
+4.
+Stakeholders & Target Users
+4
+5.
+Functional Requirements
+5
+6.
+User Flow & App Screens
+6
+7.
+Technical Implementation
+7
+8.
+Non-Functional Requirements
+8
+9.
+Impact Goals
+8
+10.
+Success Criteria
+9
+11.
+Constraints & Assumptions
+9
+12.
+Appendix – Tech Stack Summary
+10
+1. Executive Summary
+Sahyadri-Samrakshane (Kannada: Sahyadri Protection) is a native Android application designed as a
+citizen-science tool for real-time ecological alert reporting across the Western Ghats biodiversity hotspot. The
+app empowers trekkers, local villagers, and forest watchers to instantly report forest fires, landslides, illegal
+logging, and notable wildlife sightings — complete with high-precision GPS coordinates and photographic
+evidence — directly to the forest department's central monitoring dashboard.
+Powered by GenAI capabilities, Firebase real-time sync, and CameraX imaging, the app is built to work reliably
+even in low-connectivity mountainous terrain through offline-first caching. It represents a convergence of
+community policing, disaster early-warning, and environmental stewardship.
+2. Problem Statement
+The Core Challenge
+The Western Ghats — stretching across Kerala, Karnataka, Goa, Maharashtra, Tamil Nadu, and Gujarat — are
+one of the world's eight 'Hottest Hotspots' of biological diversity and serve as the primary water tower for
+peninsular India. Despite their ecological importance, these regions face severe and ongoing threats:
+■ Forest Fires
+Seasonal and man-made fires destroy thousands of hectares annually. By the
+time fire reports travel through informal channels to the forest department, the
+damage is irreversible.
+
+Sahyadri-Samrakshane  |  Project Requirement Document
+Page 2
+Confidential – Internal Academic Use Only  ·  Generated April 27, 2026
+Android GenAI App Development  ·  Sahyadri-Samrakshane
+■ Illegal Logging
+Timber poaching and illegal tree cutting are rampant in remote zones. Lack of
+direct reporting mechanisms allows offenders to escape.
+■■ Landslides
+The Ghats experience frequent landslides during monsoon. Early community
+detection can save lives, but no standardised alert channel exists.
+■ Location Ambiguity
+Even when locals manage to report an incident, conveying precise location in
+dense forest terrain is extremely difficult without GPS coordinates.
+■■ Response Lag
+The delay between community observation and official action — due to absence
+of a direct digital bridge — often renders the response ineffective.
+3. Vision & Objectives
+Vision Statement
+"To create an always-on, community-powered digital shield for the Western Ghats — where every trekker
+becomes a forest guard, and every alert becomes a seed of ecological protection."
+Strategic Objectives
+O1
+Real-Time Reporting
+Enable instant ecological alert submission with photo + GPS within 60
+seconds of incident detection.
+O2
+Offline Resilience
+Ensure zero data loss in no-signal zones by caching reports locally and
+auto-syncing on reconnection.
+O3
+Precise Location
+Provide GPS coordinates accurate to ±5 metres using
+FusedLocationProviderClient for rapid field response.
+O4
+Community Education
+Deliver contextual eco-guidelines and safe behaviour tips within the
+app.
+O5
+Dashboard Integration
+Sync all alerts to a Firebase-backed dashboard for forest department
+officials to monitor and respond.
+4. Stakeholders & Target Users
+Category
+User Type
+Priority
+Primary Actions
+Primary Users
+Trekkers & hikers in the Western
+Ghats
+High
+Report alerts, view status, read
+eco-tips
+Primary Users
+Local villagers & farmers near
+forest areas
+High
+Report alerts with minimal tech
+friction
+Secondary Users
+Forest department officers &
+guards
+High
+Receive, verify, and act on alerts via
+dashboard
+
+Sahyadri-Samrakshane  |  Project Requirement Document
+Page 3
+Confidential – Internal Academic Use Only  ·  Generated April 27, 2026
+Android GenAI App Development  ·  Sahyadri-Samrakshane
+Secondary Users
+NGOs & environmental
+researchers
+Medium
+Analyse alert data for patterns and
+studies
+Tertiary Users
+Disaster management authorities
+Medium
+Respond to landslide & fire alerts
+Developers
+Student developers (academic
+project)
+High
+Build, maintain, and demonstrate the
+app
+
+Sahyadri-Samrakshane  |  Project Requirement Document
+Page 4
+Confidential – Internal Academic Use Only  ·  Generated April 27, 2026
+Android GenAI App Development  ·  Sahyadri-Samrakshane
+5. Functional Requirements
+ID
+Feature
+Priority
+Description
+FR-01
+Alert
+Submission
+Must
+User can submit an Ecological Alert including: Alert Type, Photo,
+GPS coordinates, optional description, and timestamp.
+FR-02
+Alert Type
+Selection
+Must
+App presents four alert categories: Forest Fire, Landslide, Illegal
+Tree Cutting, Wildlife Sighting. Each has a distinct icon and
+colour code.
+FR-03
+CameraX
+Integration
+Must
+In-app camera powered by CameraX library captures
+high-resolution photos (minimum 4MP). Photo is auto-attached
+to the active alert report.
+FR-04
+GPS Capture
+Must
+FusedLocationProviderClient obtains GPS lock. Latitude and
+longitude are displayed on-screen during reporting and stored
+with the alert.
+FR-05
+Offline Caching
+Must
+If network is unavailable, the alert is stored in local Room
+database. A background WorkManager job retries upload every
+15 minutes until successful.
+FR-06
+Alert Status
+Tracking
+Must
+Each submitted alert displays one of three statuses: Reported,
+Verified, Team Dispatched. Status updates are pushed via
+Firebase real-time listener.
+FR-07
+Education Module
+Should
+A dedicated section provides eco-tips: safe trekking behaviour,
+what to do during a forest fire or wildlife encounter, guidelines for
+eco-sensitive zones.
+FR-08
+Alert History
+Should
+Users can view their previously submitted alerts with status,
+photo thumbnail, GPS location, and submission timestamp.
+FR-09
+GenAI Alert Assist
+Should
+Gemini API integration to (a) auto-suggest alert type from photo,
+and (b) generate a structured description of the scene to assist
+reporting.
+FR-10
+Map View
+Could
+Integration with Google Maps SDK to display reported alerts as
+pins on a local map within 50 km radius.
+FR-11
+Push Notifications
+Could
+FCM-powered push notifications alert users when their reported
+incident status changes from Reported to Verified or Team
+Dispatched.
+FR-12
+Multilingual Support
+Could
+App UI available in English and Kannada to maximise
+accessibility for local Karnataka communities.
+6. User Flow & App Screens
+
+Sahyadri-Samrakshane  |  Project Requirement Document
+Page 5
+Confidential – Internal Academic Use Only  ·  Generated April 27, 2026
+Android GenAI App Development  ·  Sahyadri-Samrakshane
+Screen 1
+Splash /
+Onboarding
+App logo on forest green background. Brief 3-slide onboarding
+explaining the mission. Permission requests: Camera, Location,
+Notification.
+Screen 2
+Home Dashboard
+Greeting with user's region. Quick-action button: '+ Report Alert'
+(amber CTA). Stats panel: My Reports, Local Alerts. Navigation:
+Home | Report | History | Learn.
+Screen 3
+Alert Type
+Selection
+Grid of 4 cards: Forest Fire (red-orange icon), Landslide (brown
+icon), Illegal Tree Cutting (dark green icon), Wildlife Sighting (teal
+icon). Each card tappable with haptic feedback.
+Screen 4
+Capture & Report
+CameraX viewfinder (full-screen). GPS coordinate overlay at bottom.
+Capture button. After capture: Review photo, add optional text note.
+'Submit Alert' button.
+Screen 5
+Submission
+Confirmation
+Success animation (leaf icon). Alert ID displayed. Estimated review
+time. Option to 'Report Another' or 'View My Alerts'. Offline banner if
+cached.
+Screen 6
+My Alerts / History
+List of past alerts sorted by recency. Status chip (colour-coded). Tap
+to expand: photo, GPS, description, status timeline.
+Screen 7
+Education /
+Eco-Tips
+Card-based tips: Fire Safety, Encountering Wildlife, Landslide
+Precautions, Leave No Trace. Each card expandable with detailed
+guidance.
+Screen 8
+Settings
+Profile, Notification preferences, Language toggle (EN / KN), About &
+Acknowledgements.
+
+Sahyadri-Samrakshane  |  Project Requirement Document
+Page 6
+Confidential – Internal Academic Use Only  ·  Generated April 27, 2026
+Android GenAI App Development  ·  Sahyadri-Samrakshane
+7. Technical Implementation
+Architecture Overview
+The application follows the MVVM (Model-View-ViewModel) architecture pattern with a Repository layer,
+ensuring clean separation of concerns, testability, and scalability.
+Layer / Component
+Technology
+Implementation Notes
+UI Layer
+Jetpack Compose
+Declarative UI with Nature-Green theme tokens.
+Composable screens for each user flow.
+StateFlow-driven reactivity.
+ViewModel Layer
+Kotlin Coroutines + Flow
+Business logic isolation. Handles GPS updates,
+image capture state, and alert submission lifecycle.
+Repository Layer
+Repository Pattern
+Single source of truth. Decides whether to fetch from
+Room (offline) or Firebase (online).
+Local Storage
+Room Database
+Stores unsynced alerts with columns: alertId, type,
+photoPath, latitude, longitude, description,
+syncStatus, timestamp.
+Remote Sync
+Firebase Firestore
+Real-time NoSQL database. Alerts collection synced
+bi-directionally. Status updates pushed to device.
+Background Sync
+WorkManager
+PeriodicWorkRequest checks network and uploads
+cached Room alerts to Firestore. Guaranteed
+execution even post-restart.
+Camera
+CameraX (Jetpack)
+ImageCapture use-case for high-res photo. Preview
+use-case for viewfinder. LifecycleCameraController
+for simplified setup.
+Location
+FusedLocationProviderClie
+nt
+HIGH_ACCURACY priority. Real-time updates
+during capture. Fallback to last known location if fix
+unavailable.
+GenAI
+Gemini 1.5 Flash API
+Multimodal prompt: send captured image → receive
+alert type suggestion + auto-generated incident
+description.
+Notifications
+Firebase Cloud Messaging
+Server-side trigger on Firestore document update →
+FCM push to user device on status change.
+Maps
+Google Maps SDK /
+OSMdroid
+Display alert location pins. Offline tile caching via
+OSMdroid for no-signal areas.
+Auth
+Firebase Anonymous Auth
+Lightweight anonymous auth to associate alerts with
+a device identity without requiring sign-up.
+
+Sahyadri-Samrakshane  |  Project Requirement Document
+Page 7
+Confidential – Internal Academic Use Only  ·  Generated April 27, 2026
+Android GenAI App Development  ·  Sahyadri-Samrakshane
+Data Model — Alert Document (Firestore)
+Field
+Type
+Values
+Description
+alertId
+String
+UUID
+Auto-generated unique identifier
+userId
+String
+Device ID
+Firebase Anonymous Auth UID
+alertType
+Enum
+FOREST_FIRE | LANDSLIDE |
+ILLEGAL_LOGGING |
+WILDLIFE
+Category of ecological event
+latitude
+Double
+±5m accuracy
+GPS latitude from FusedLocationProvider
+longitude
+Double
+±5m accuracy
+GPS longitude from FusedLocationProvider
+photoUrl
+String
+Firebase Storage URL
+Uploaded photo reference
+description
+String
+Optional (GenAI-generated or
+manual)
+Scene description
+status
+Enum
+REPORTED | VERIFIED |
+TEAM_DISPATCHED
+Current response status
+timestamp
+Timesta
+mp
+ISO 8601
+Alert creation time (UTC)
+syncStatus
+Enum
+PENDING | SYNCED
+Local Room sync state (offline support)
+
+Sahyadri-Samrakshane  |  Project Requirement Document
+Page 8
+Confidential – Internal Academic Use Only  ·  Generated April 27, 2026
+Android GenAI App Development  ·  Sahyadri-Samrakshane
+8. Non-Functional Requirements
+Category
+ID
+Requirement
+Performance
+NFR-01
+Alert submission (photo + GPS + upload) must complete within 8 seconds
+on a stable 4G connection.
+Performance
+NFR-02
+App cold-start time must not exceed 3 seconds on a mid-range Android
+device (2GB RAM).
+Reliability
+NFR-03
+Offline-cached alerts must not be lost across app restarts, device reboots, or
+OS-level process kills.
+Reliability
+NFR-04
+GPS coordinate acquisition must succeed within 30 seconds in open terrain;
+fallback to last-known location otherwise.
+Usability
+NFR-05
+UI text minimum font size 14sp. WCAG AA contrast ratio (4.5:1) for all text
+on green backgrounds.
+Usability
+NFR-06
+First-time user should be able to submit an alert without any training within 2
+minutes of installing.
+Security
+NFR-07
+No personally identifiable information collected without explicit consent.
+Anonymous auth only.
+Security
+NFR-08
+All network communication over HTTPS / TLS 1.3. Firebase Security Rules
+restrict write access to authenticated users.
+Maintainability
+NFR-09
+Code coverage minimum 60% for ViewModel and Repository layers (JUnit +
+Mockito).
+Compatibility
+NFR-10
+Target SDK 34 (Android 14). Minimum SDK 26 (Android 8.0 Oreo).
+9. Impact Goals
+■ Environmental Security
+The Western Ghats supply water to 245 million people across six Indian
+states. Early detection and reporting of deforestation and fires directly
+preserves this critical watershed.
+■■ Disaster Management
+Landslides in the Ghats kill dozens annually. Citizen-reported early warnings
+— transmitted with GPS precision — can enable pre-emptive evacuations
+and save lives.
+■ Community Policing
+Engaging local villages as active stakeholders in forest protection fosters
+ownership, reduces illegal activity through social deterrence, and strengthens
+the human-nature relationship.
+
+Sahyadri-Samrakshane  |  Project Requirement Document
+Page 9
+Confidential – Internal Academic Use Only  ·  Generated April 27, 2026
+Android GenAI App Development  ·  Sahyadri-Samrakshane
+■ Education & Awareness
+In-app eco-tips cultivate a generation of informed eco-citizens who
+understand biodiversity conservation, responsible trekking, and wildlife
+coexistence.
+■ Data-Driven Conservation
+Aggregated, geotagged alert data provides researchers and policymakers
+with evidence-based insights into threat hotspots, seasonal patterns, and
+enforcement gaps.
+10. Success Criteria (Student Evaluation)
+ID
+Priority
+Criterion
+Acceptance Condition
+SC-01
+Critical
+Offline-First Reporting
+App caches alert locally when network is unavailable.
+WorkManager automatically syncs report to Firebase within
+15 minutes of connectivity restoration. Zero data loss
+verified by test.
+SC-02
+Critical
+Live GPS Display
+Latitude and longitude coordinates are visible on-screen in
+the Report screen during photo capture, updating in real
+time with minimum 1 update per 5 seconds.
+SC-03
+Critical
+Nature-Friendly UI
+All screens use the defined green/earth-tone colour palette.
+Primary: #1B4332, Secondary: #52B788, Accent:
+#E9C46A. No grey/blue corporate palette.
+SC-04
+Critical
+Four Alert Types
+All four alert categories (Forest Fire, Landslide, Illegal Tree
+Cutting, Wildlife Sighting) are selectable with distinct icons,
+colours, and Firebase storage paths.
+SC-05
+Important
+Status Tracking
+Submitted alerts display status (Reported / Verified / Team
+Dispatched). Status changes made in Firebase console are
+reflected in app within 5 seconds via real-time listener.
+SC-06
+Important
+CameraX Integration
+Photos are captured via CameraX (not
+Intent/ACTION_IMAGE_CAPTURE). Resolution minimum
+1920x1080. Photo stored in Firebase Storage and URL
+written to Firestore document.
+SC-07
+Important
+GenAI Feature
+At least one GenAI-powered feature is implemented and
+functional (e.g., Gemini-based alert type suggestion from
+photo, or auto-description generation).
+SC-08
+Bonus
+Multilingual (EN/KN)
+App fully supports Kannada language toggle with all UI
+strings translated using Android string resources.
+SC-09
+Bonus
+Map View
+Recent alerts displayed as map pins in a Google Maps or
+OSMdroid fragment with correct GPS coordinates.
+
+Sahyadri-Samrakshane  |  Project Requirement Document
+Page 10
+Confidential – Internal Academic Use Only  ·  Generated April 27, 2026
+Android GenAI App Development  ·  Sahyadri-Samrakshane
+11. Constraints & Assumptions
+Technical Constraints
+■■ The app targets Android only (no iOS deliverable required for this academic submission).
+■■ Firebase free-tier (Spark Plan) is assumed; Blaze Plan may be needed for Firebase Storage beyond
+1GB.
+■■ Gemini API access requires a valid Google AI Studio API key — students must provision their own key.
+■■ CameraX requires a physical Android device for full testing; emulator camera may behave differently.
+■■ FusedLocationProvider requires Google Play Services; AOSP devices without Play Services are out of
+scope.
+■■ Offline sync via WorkManager is constrained to minimum 15-minute intervals per Android OS battery
+restrictions.
+Assumptions
+■ Forest department officials will access alerts through the Firebase console or a separate web dashboard
+(not this app).
+■ Users grant Camera and Location (ACCESS_FINE_LOCATION) permissions on first launch.
+■ The app is used in Karnataka / Western Ghats region; time zone is IST (UTC+5:30).
+■ Alert photos will be under 5MB per submission (JPEG compression applied before upload).
+■ Students will mock the 'Verified' and 'Team Dispatched' status updates manually via Firebase console for
+demonstration.
+■ Connectivity restoration is detected via ConnectivityManager.NetworkCallback API.
+12. Appendix – Technology Stack Summary
+Category
+Technology / Value
+Notes
+Language
+Kotlin 1.9+
+Primary development language
+UI Framework
+Jetpack Compose
+Declarative, reactive UI
+Architecture
+MVVM + Repository
+Clean architecture pattern
+Camera
+CameraX (androidx.camera)
+High-res capture, preview, lifecycle-aware
+Location
+FusedLocationProviderClient
+High-accuracy GPS, battery-efficient
+Local DB
+Room (androidx.room)
+Offline alert caching, SQLite abstraction
+Remote DB
+Firebase Firestore
+Real-time sync, NoSQL cloud database
+File Storage
+Firebase Storage
+Photo upload and CDN delivery
+Auth
+Firebase Auth (Anonymous)
+Device identity without sign-up friction
+Notifications
+Firebase Cloud Messaging
+Status-change push notifications
+Background Jobs
+WorkManager
+Guaranteed offline sync retry
+
+Sahyadri-Samrakshane  |  Project Requirement Document
+Page 11
+Confidential – Internal Academic Use Only  ·  Generated April 27, 2026
+Android GenAI App Development  ·  Sahyadri-Samrakshane
+GenAI
+Gemini 1.5 Flash (Google AI)
+Photo analysis, alert description generation
+Maps
+Google Maps SDK / OSMdroid
+Alert visualisation (optional offline tiles)
+DI
+Hilt (Dagger)
+Dependency injection
+Async
+Kotlin Coroutines + Flow
+Reactive data streams, async operations
+Testing
+JUnit 4 + Mockito + Espresso
+Unit and integration tests
+CI/CD
+GitHub Actions (optional)
+Automated build and test pipeline
+Design
+Material 3 (You)
+Adaptive colour, accessible components
+Colour Scheme
+#1B4332 / #52B788 / #E9C46A
+Forest dark / leaf green / amber accent
+Min SDK
+API 26 (Android 8.0)
+Broad device coverage
+Target SDK
+API 34 (Android 14)
+Latest platform features
+■ Sahyadri-Samrakshane — Project Requirement Document
+ This document is prepared for academic review as part of the Android GenAI App Development module. All Firebase projects, API
+ keys, and cloud resources are to be provisioned by the student team. Status: Draft v1.0 — subject to revision based on faculty
+ feedback.

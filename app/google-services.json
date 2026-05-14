@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "319012300996",
+    "project_id": "sahyadri-samrakshane-aa801",
+    "storage_bucket": "sahyadri-samrakshane-aa801.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:319012300996:android:a44b336075a153d0854191",
+        "android_client_info": {
+          "package_name": "com.sahyadri.samrakshane"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWm6kfBQvnmGc9nRTVzgmE2ng5pWT7pr8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
